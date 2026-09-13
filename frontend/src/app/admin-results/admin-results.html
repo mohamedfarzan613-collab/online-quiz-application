@@ -1,0 +1,296 @@
+<div class="results-container">
+
+  <div class="results-card">
+
+    <div class="results-header">
+
+      <div>
+
+        <h1>
+          Student Results
+        </h1>
+
+        <p>
+          View quiz performance of students
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="logout-button"
+        (click)="adminLogout()"
+      >
+
+        Admin Logout
+
+      </button>
+
+    </div>
+
+
+    @if (loading) {
+
+      <div class="loading">
+
+        <h2>
+          Loading Student Results...
+        </h2>
+
+        <p>
+          Please wait
+        </p>
+
+      </div>
+
+    }
+
+
+    @if (
+      !loading &&
+      message
+    ) {
+
+      <p class="error-message">
+        {{ message }}
+      </p>
+
+    }
+
+
+    @if (
+      !loading &&
+      results.length === 0
+    ) {
+
+      <div class="no-results">
+
+        <h2>
+          No Results Found
+        </h2>
+
+        <p>
+          Students have not completed any quizzes yet.
+        </p>
+
+      </div>
+
+    }
+
+
+    @if (
+      !loading &&
+      results.length > 0
+    ) {
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                #
+              </th>
+
+              <th>
+                Student Name
+              </th>
+
+              <th>
+                Email
+              </th>
+
+              <th>
+                Quiz
+              </th>
+
+              <th>
+                Score
+              </th>
+
+              <th>
+                Total
+              </th>
+
+              <th>
+                Percentage
+              </th>
+
+              <th>
+                Due Date
+              </th>
+
+              <th>
+                Submitted
+              </th>
+
+              <th>
+                Status
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              result of results;
+              track result._id;
+              let i = $index
+            ) {
+
+              <tr>
+
+                <td>
+                  {{ i + 1 }}
+                </td>
+
+
+                <td>
+
+                  {{ result.userId?.name ||
+                     'Unknown Student' }}
+
+                </td>
+
+
+                <td>
+
+                  {{ result.userId?.email ||
+                     'Unknown Email' }}
+
+                </td>
+
+
+                <td>
+
+                  {{ result.quizId?.title ||
+                     'Unknown Quiz' }}
+
+                </td>
+
+
+                <td>
+
+                  <strong>
+                    {{ result.score }}
+                  </strong>
+
+                </td>
+
+
+                <td>
+
+                  {{ result.totalQuestions }}
+
+                </td>
+
+
+                <td>
+
+                  <strong>
+
+                    {{ result.percentage |
+                       number:'1.0-2' }}%
+
+                  </strong>
+
+                </td>
+
+
+                <td>
+
+                  @if (
+                    result.quizId?.dueDate ||
+                    result.dueDate
+                  ) {
+
+                    {{
+                      result.quizId?.dueDate ||
+                      result.dueDate
+                      | date:'dd-MM-yyyy hh:mm a'
+                    }}
+
+                  } @else {
+
+                    Not Set
+
+                  }
+
+                </td>
+
+
+                <td>
+
+                  {{
+                    result.submittedAt ||
+                    result.completedAt
+                    | date:'dd-MM-yyyy hh:mm a'
+                  }}
+
+                </td>
+
+
+                <td>
+
+                  @if (
+                    result.lateSubmitted
+                  ) {
+
+                    <span class="late-status">
+
+                      Late Submitted
+
+                    </span>
+
+                  } @else {
+
+                    <span class="ontime-status">
+
+                      On Time
+
+                    </span>
+
+                  }
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+
+    <div class="bottom-links">
+
+      <a routerLink="/admin-dashboard">
+
+        ← Admin Dashboard
+
+      </a>
+
+
+      <a routerLink="/admin">
+
+        Manage Quizzes
+
+      </a>
+
+    </div>
+
+  </div>
+
+</div>

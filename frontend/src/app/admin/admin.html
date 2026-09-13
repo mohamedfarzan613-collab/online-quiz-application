@@ -1,0 +1,435 @@
+<div class="admin-container">
+
+  <div class="admin-card">
+
+    <h1>
+      Admin Quiz Management
+    </h1>
+
+    <p class="subtitle">
+      Create and manage quizzes
+    </p>
+
+
+    <button
+      type="button"
+      class="admin-logout-button"
+      (click)="adminLogout()">
+
+      Admin Logout
+
+    </button>
+
+
+    <!-- ================================= -->
+    <!-- QUIZ FORM -->
+    <!-- ================================= -->
+
+    <div class="form-section">
+
+      <h2>
+
+        @if (editing) {
+
+          Edit Quiz
+
+        } @else {
+
+          Add New Quiz
+
+        }
+
+      </h2>
+
+
+      <!-- TITLE -->
+
+      <div class="input-group">
+
+        <label>
+          Quiz Title
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="quiz.title"
+          name="quizTitle"
+          placeholder="Enter quiz title"
+        >
+
+      </div>
+
+
+      <!-- DESCRIPTION -->
+
+      <div class="input-group">
+
+        <label>
+          Description
+        </label>
+
+        <textarea
+          [(ngModel)]="quiz.description"
+          name="description"
+          placeholder="Enter quiz description"
+        ></textarea>
+
+      </div>
+
+
+      <!-- DUE DATE -->
+
+      <div class="input-group">
+
+        <label>
+          Quiz Due Date & Time
+        </label>
+
+        <input
+          type="datetime-local"
+          [(ngModel)]="quiz.dueDate"
+          name="dueDate"
+        >
+
+        <small class="due-date-help">
+
+          Students can submit after this time,
+          but the result will be marked as
+          "Late Submitted".
+
+        </small>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- QUESTIONS -->
+      <!-- ================================= -->
+
+      @for (
+        question of quiz.questions;
+        track $index;
+        let i = $index
+      ) {
+
+        <div class="question-box">
+
+          <div class="question-header">
+
+            <h3>
+              Question {{ i + 1 }}
+            </h3>
+
+
+            @if (
+              quiz.questions.length > 1
+            ) {
+
+              <button
+                type="button"
+                class="remove-button"
+                (click)="removeQuestion(i)"
+              >
+
+                Remove
+
+              </button>
+
+            }
+
+          </div>
+
+
+          <!-- QUESTION -->
+
+          <div class="input-group">
+
+            <label>
+              Question
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="question.question"
+              [name]="'question' + i"
+              placeholder="Enter question"
+            >
+
+          </div>
+
+
+          <!-- OPTIONS -->
+
+          <label class="option-title">
+            Options
+          </label>
+
+
+          @for (
+            option of question.options;
+            track $index;
+            let j = $index
+          ) {
+
+            <div class="option-input">
+
+              <span>
+                {{ j + 1 }}.
+              </span>
+
+              <input
+                type="text"
+                [(ngModel)]="question.options[j]"
+                [name]="'option' + i + '_' + j"
+                placeholder="Enter option"
+              >
+
+            </div>
+
+          }
+
+
+          <!-- CORRECT ANSWER -->
+
+          <div class="input-group">
+
+            <label>
+              Correct Answer
+            </label>
+
+            <select
+              [(ngModel)]="question.correctAnswer"
+              [name]="'correctAnswer' + i"
+            >
+
+              <option value="">
+                Select correct answer
+              </option>
+
+
+              @for (
+                option of question.options;
+                track $index;
+                let j = $index
+              ) {
+
+                <option
+                  [value]="option"
+                >
+
+                  {{ option || 'Option ' + (j + 1) }}
+
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- ADD QUESTION -->
+
+      <button
+        type="button"
+        class="add-question-button"
+        (click)="addQuestion()"
+      >
+
+        + Add Question
+
+      </button>
+
+
+      <!-- SAVE -->
+
+      <button
+        type="button"
+        class="save-button"
+        (click)="saveQuiz()"
+      >
+
+        @if (editing) {
+
+          Update Quiz
+
+        } @else {
+
+          Save Quiz
+
+        }
+
+      </button>
+
+
+      <!-- CANCEL -->
+
+      @if (editing) {
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="cancelEdit()"
+        >
+
+          Cancel Edit
+
+        </button>
+
+      }
+
+
+      <!-- MESSAGE -->
+
+      @if (message) {
+
+        <p class="message">
+
+          {{ message }}
+
+        </p>
+
+      }
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- EXISTING QUIZZES -->
+    <!-- ================================= -->
+
+    <div class="quiz-management">
+
+      <h2>
+        Existing Quizzes
+      </h2>
+
+
+      @if (
+        quizzes.length === 0
+      ) {
+
+        <div class="no-quizzes">
+
+          <h3>
+            No quizzes available
+          </h3>
+
+          <p>
+            Create your first quiz above.
+          </p>
+
+        </div>
+
+      }
+
+
+      @for (
+        quizItem of quizzes;
+        track quizItem._id
+      ) {
+
+        <div class="quiz-management-item">
+
+
+          <div class="quiz-details">
+
+            <h3>
+              {{ quizItem.title }}
+            </h3>
+
+
+            <p>
+              {{ quizItem.description }}
+            </p>
+
+
+            <span>
+
+              {{ quizItem.questions.length }}
+              Questions
+
+            </span>
+
+
+            @if (quizItem.dueDate) {
+
+              <p class="quiz-due-date">
+
+                ⏰ Due:
+
+                {{
+                  quizItem.dueDate
+                    | date:'dd-MM-yyyy hh:mm a'
+                }}
+
+              </p>
+
+            } @else {
+
+              <p class="quiz-due-date">
+
+                ⚠️ No due date set
+
+              </p>
+
+            }
+
+          </div>
+
+
+          <div class="admin-actions">
+
+            <button
+              type="button"
+              class="edit-button"
+              (click)="editQuiz(quizItem)"
+            >
+
+              Edit
+
+            </button>
+
+
+            <button
+              type="button"
+              class="delete-button"
+              (click)="deleteQuiz(quizItem._id)"
+            >
+
+              Delete
+
+            </button>
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- BOTTOM LINKS -->
+    <!-- ================================= -->
+
+    <div class="bottom-links">
+
+      <a routerLink="/quiz">
+        Go to Quiz
+      </a>
+
+      <a routerLink="/dashboard">
+        Dashboard
+      </a>
+
+    </div>
+
+  </div>
+
+</div>

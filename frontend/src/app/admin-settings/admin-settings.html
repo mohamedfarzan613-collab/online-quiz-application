@@ -1,0 +1,144 @@
+<div class="settings-page">
+
+  <div class="settings-card">
+
+    <div class="settings-header">
+
+      <div>
+        <h1>Admin Settings</h1>
+
+        <p>
+          Manage your administrator account
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="back-button"
+        (click)="goToDashboard()">
+
+        ← Dashboard
+
+      </button>
+
+    </div>
+
+
+    @if (loading) {
+
+      <div class="loading">
+
+        <h2>Loading Settings...</h2>
+
+        <p>Please wait</p>
+
+      </div>
+
+    }
+
+
+    @if (!loading) {
+
+      <div class="settings-form">
+
+        <div class="input-group">
+
+          <label>
+            Admin Username
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="username"
+            placeholder="Enter admin username"
+          >
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>
+            Admin Email
+          </label>
+
+          <input
+            type="email"
+            [(ngModel)]="email"
+            placeholder="Enter admin email"
+          >
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>
+            New Password
+          </label>
+
+          <input
+            type="password"
+            [(ngModel)]="password"
+            placeholder="Enter new password"
+          >
+
+          <small>
+            Leave blank if you do not want to change the password.
+          </small>
+
+        </div>
+
+
+        @if (message) {
+
+          <div class="success-message">
+            {{ message }}
+          </div>
+
+        }
+
+
+        @if (errorMessage) {
+
+          <div class="error-message">
+            {{ errorMessage }}
+          </div>
+
+        }
+
+
+        <button
+          type="button"
+          class="save-button"
+          (click)="updateSettings()"
+          [disabled]="saving">
+
+          @if (saving) {
+            Saving...
+          } @else {
+            Save Changes
+          }
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <div class="bottom-links">
+
+      <a routerLink="/admin-dashboard">
+        Admin Dashboard
+      </a>
+
+      <a routerLink="/admin">
+        Quiz Management
+      </a>
+
+    </div>
+
+  </div>
+
+</div>

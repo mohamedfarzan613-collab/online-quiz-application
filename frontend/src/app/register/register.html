@@ -1,0 +1,63 @@
+<div class="register-container">
+
+  <div class="register-card">
+
+    <h1>Online Quiz Application</h1>
+
+    <h2>Create Account</h2>
+
+    <p>Register to start taking quizzes</p>
+
+    <form (ngSubmit)="registerUser()">
+
+      <div class="input-group">
+        <label>Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="name"
+          name="name"
+          placeholder="Enter your name"
+          required>
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Enter your email"
+          required>
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Enter your password"
+          required>
+      </div>
+
+      <button type="submit" class="register-button">
+        Register
+      </button>
+
+    </form>
+
+    <p class="message">
+      {{ message }}
+    </p>
+
+    <p class="login-text">
+      Already have an account?
+      <a routerLink="/login">Login</a>
+    </p>
+
+  </div>
+
+</div>

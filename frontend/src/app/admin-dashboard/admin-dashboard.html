@@ -1,0 +1,265 @@
+<div class="dashboard-container">
+
+  <div class="dashboard-card">
+
+
+    <!-- ========================= -->
+    <!-- HEADER -->
+    <!-- ========================= -->
+
+    <div class="dashboard-header">
+
+      <div>
+
+        <h1>
+          Admin Dashboard
+        </h1>
+
+        <p>
+          Online Quiz Application Management
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="logout-button"
+        (click)="adminLogout()">
+
+        Admin Logout
+
+      </button>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- LOADING -->
+    <!-- ========================= -->
+
+    @if (loading) {
+
+      <div class="loading">
+
+        <h2>
+          Loading Dashboard...
+        </h2>
+
+        <p>
+          Please wait
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- ========================= -->
+    <!-- DASHBOARD CONTENT -->
+    <!-- ========================= -->
+
+    @if (!loading) {
+
+
+      <!-- ========================= -->
+      <!-- STATISTICS -->
+      <!-- ========================= -->
+
+      <div class="statistics">
+
+
+        <!-- TOTAL USERS -->
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            👥
+          </div>
+
+          <div>
+
+            <h3>
+              Total Users
+            </h3>
+
+            <h2>
+              {{ totalUsers }}
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <!-- TOTAL QUIZZES -->
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            📝
+          </div>
+
+          <div>
+
+            <h3>
+              Total Quizzes
+            </h3>
+
+            <h2>
+              {{ totalQuizzes }}
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <!-- TOTAL QUESTIONS -->
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            ❓
+          </div>
+
+          <div>
+
+            <h3>
+              Total Questions
+            </h3>
+
+            <h2>
+              {{ totalQuestions }}
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <!-- QUIZ ATTEMPTS -->
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            🎯
+          </div>
+
+          <div>
+
+            <h3>
+              Quiz Attempts
+            </h3>
+
+            <h2>
+              {{ totalAttempts }}
+            </h2>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- QUIZ MANAGEMENT -->
+      <!-- ========================= -->
+
+      <div class="management-section">
+
+        <h2>
+          Quiz Management
+        </h2>
+
+        <p>
+          Create, edit and delete quizzes.
+        </p>
+
+        <button
+          type="button"
+          class="manage-button"
+          (click)="goToQuizManagement()">
+
+          Manage Quizzes
+
+        </button>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- STUDENT RESULTS -->
+      <!-- ========================= -->
+
+      <div class="results-section">
+
+        <h2>
+          Student Results
+        </h2>
+
+        <p>
+          View student quiz scores and performance.
+        </p>
+
+        <button
+          type="button"
+          class="results-button"
+          routerLink="/admin-results">
+
+          View Student Results
+
+        </button>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- ADMIN SETTINGS -->
+      <!-- ========================= -->
+
+      <div class="settings-section">
+
+        <h2>
+          Admin Settings
+        </h2>
+
+        <p>
+          Change admin username, email and password.
+        </p>
+
+        <button
+          type="button"
+          class="settings-button"
+          routerLink="/admin-settings">
+
+          Admin Settings
+
+        </button>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- BOTTOM LINKS -->
+      <!-- ========================= -->
+
+      <div class="bottom-links">
+
+        <a routerLink="/quiz">
+          Go to Quiz
+        </a>
+
+        <a routerLink="/dashboard">
+          Student Dashboard
+        </a>
+
+      </div>
+
+
+    }
+
+  </div>
+
+</div>

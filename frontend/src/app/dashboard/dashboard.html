@@ -1,0 +1,327 @@
+<div class="dashboard-page">
+
+  <div class="dashboard-container">
+
+    <!-- Header -->
+    <div class="dashboard-header">
+
+      <div>
+        <h1>Student Dashboard</h1>
+
+        <p>
+          Welcome, {{ userName }}!
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="logout-button"
+        (click)="logout()">
+        Logout
+      </button>
+
+    </div>
+
+
+    <!-- Loading -->
+    @if (loading) {
+
+      <div class="loading-box">
+
+        <h2>Loading Dashboard...</h2>
+
+        <p>Please wait</p>
+
+      </div>
+
+    }
+
+
+    <!-- Error Message -->
+    @if (!loading && message) {
+
+      <div class="message-box">
+        {{ message }}
+      </div>
+
+    }
+
+
+    @if (!loading && !message) {
+
+      <!-- Statistics -->
+      <div class="statistics">
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            🎯
+          </div>
+
+          <div class="stat-content">
+
+            <h3>
+              Total Attempts
+            </h3>
+
+            <h2>
+              {{ totalAttempts }}
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            📊
+          </div>
+
+          <div class="stat-content">
+
+            <h3>
+              Average Score
+            </h3>
+
+            <h2>
+              {{ averageScore | number:'1.0-0' }}%
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            🏆
+          </div>
+
+          <div class="stat-content">
+
+            <h3>
+              Best Score
+            </h3>
+
+            <h2>
+              {{ bestScore | number:'1.0-0' }}%
+            </h2>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- My Quiz Results -->
+      <div class="results-section">
+
+        <h2>
+          My Quiz Results
+        </h2>
+
+
+        @if (results.length === 0) {
+
+          <div class="no-results">
+
+            <div class="no-results-icon">
+              📝
+            </div>
+
+            <h3>
+              No Quiz Results
+            </h3>
+
+            <p>
+              You have not completed any quiz yet.
+            </p>
+
+          </div>
+
+        }
+
+
+        @if (results.length > 0) {
+
+          <div class="table-container">
+
+            <table class="results-table">
+
+              <thead>
+
+                <tr>
+
+                  <th>#</th>
+
+                  <th>Quiz</th>
+
+                  <th>Score</th>
+
+                  <th>Percentage</th>
+
+                  <th>Due Date</th>
+
+                  <th>Submitted</th>
+
+                  <th>Status</th>
+
+                  <th>Late By</th>
+
+                </tr>
+
+              </thead>
+
+
+              <tbody>
+
+                @for (
+                  result of results;
+                  track result._id;
+                  let i = $index
+                ) {
+
+                  <tr>
+
+                    <!-- Number -->
+                    <td class="number-cell">
+                      {{ i + 1 }}
+                    </td>
+
+
+                    <!-- Quiz -->
+                    <td class="quiz-name">
+
+                      {{ getQuizTitle(result) }}
+
+                    </td>
+
+
+                    <!-- Score -->
+                    <td class="score-cell">
+
+                      <strong>
+                        {{ result.score }}
+                      </strong>
+
+                      /
+                      {{ result.totalQuestions }}
+
+                    </td>
+
+
+                    <!-- Percentage -->
+                    <td>
+
+                      <span class="percentage">
+
+                        {{ result.percentage | number:'1.0-0' }}%
+
+                      </span>
+
+                    </td>
+
+
+                    <!-- Due Date -->
+                    <td>
+
+                      @if (result.dueDate) {
+
+                        {{ result.dueDate | date:'dd-MM-yyyy hh:mm a' }}
+
+                      } @else {
+
+                        <span class="not-available">
+                          —
+                        </span>
+
+                      }
+
+                    </td>
+
+
+                    <!-- Submitted -->
+                    <td>
+
+                      {{ result.completedAt | date:'dd-MM-yyyy hh:mm a' }}
+
+                    </td>
+
+
+                    <!-- Status -->
+                    <td>
+
+                      @if (isLate(result)) {
+
+                        <span class="late-status">
+                          ⚠️ Late Submitted
+                        </span>
+
+                      } @else {
+
+                        <span class="ontime-status">
+                          ✅ On Time
+                        </span>
+
+                      }
+
+                    </td>
+
+
+                    <!-- Late By -->
+                    <td>
+
+                      @if (isLate(result)) {
+
+                        <span class="late-time">
+                          {{ getLateBy(result) }}
+                        </span>
+
+                      } @else {
+
+                        <span class="not-available">
+                          —
+                        </span>
+
+                      }
+
+                    </td>
+
+                  </tr>
+
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        }
+
+      </div>
+
+
+      <!-- Take Another Quiz -->
+      <div class="take-quiz-section">
+
+        <button
+          type="button"
+          class="take-quiz-button"
+          (click)="takeAnotherQuiz()">
+
+          Take Another Quiz
+
+        </button>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>

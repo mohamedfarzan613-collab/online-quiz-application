@@ -1,0 +1,261 @@
+<div class="quiz-container">
+
+  <div class="quiz-card">
+
+    <!-- Loading -->
+
+    @if (loading) {
+
+      <div class="loading">
+
+        <h2>Loading Quizzes...</h2>
+
+        <p>Please wait...</p>
+
+      </div>
+
+    }
+
+
+    <!-- Quiz List -->
+
+    @if (!loading && !selectedQuiz && !message) {
+
+      <div class="quiz-list">
+
+        <h1>Available Quizzes</h1>
+
+        <p class="description">
+          Select a quiz to start
+        </p>
+
+
+        @if (quizzes.length === 0) {
+
+          <div class="no-quiz">
+
+            <h2>No Quizzes Available</h2>
+
+            <p>
+              Please ask the administrator to add a quiz.
+            </p>
+
+          </div>
+
+        }
+
+
+        @for (
+          quiz of quizzes;
+          track quiz._id
+        ) {
+
+          <div class="quiz-item">
+
+            <div class="quiz-info">
+
+              <h2>
+                {{ quiz.title }}
+              </h2>
+
+              <p>
+                {{ quiz.description }}
+              </p>
+
+              <span>
+                {{ quiz.questions.length }}
+                Questions
+              </span>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="start-button"
+              (click)="selectQuiz(quiz)">
+
+              Start Quiz
+
+            </button>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- Error Message -->
+
+    @if (message) {
+
+      <div class="message">
+
+        <h2>{{ message }}</h2>
+
+      </div>
+
+    }
+
+
+    <!-- Selected Quiz -->
+
+    @if (selectedQuiz && !submitted) {
+
+      <div class="quiz-content">
+
+        <button
+          type="button"
+          class="back-button"
+          (click)="backToQuizList()">
+
+          ← Back to Quizzes
+
+        </button>
+
+
+        <h1>
+          {{ selectedQuiz.title }}
+        </h1>
+
+        <p class="description">
+          {{ selectedQuiz.description }}
+        </p>
+
+
+        <!-- Questions -->
+
+        @for (
+          question of selectedQuiz.questions;
+          track question._id;
+          let questionIndex = $index
+        ) {
+
+          <div class="question-box">
+
+            <h3>
+
+              {{ questionIndex + 1 }}.
+              {{ question.question }}
+
+            </h3>
+
+
+            <!-- Options -->
+
+            @for (
+              option of question.options;
+              track option
+            ) {
+
+              <label class="option">
+
+                <input
+                  type="radio"
+                  [name]="'question_' + questionIndex"
+                  [value]="option"
+                  [checked]="
+                    answers[questionIndex] === option
+                  "
+                  (click)="
+                    selectAnswer(
+                      questionIndex,
+                      option
+                    )
+                  "
+                >
+
+                <span>
+                  {{ option }}
+                </span>
+
+              </label>
+
+            }
+
+          </div>
+
+        }
+
+
+        <!-- Submit -->
+
+        <button
+          type="button"
+          class="submit-button"
+          (click)="calculateScore()">
+
+          Submit Quiz
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- Result -->
+
+    @if (submitted) {
+
+      <div class="result-box">
+
+        <h1>Quiz Result</h1>
+
+        <p>
+
+          Your Score:
+
+          <strong>
+            {{ score }} /
+            {{ selectedQuiz.questions.length }}
+          </strong>
+
+        </p>
+
+
+        <p>
+
+          Percentage:
+
+          <strong>
+            {{ percentage }}%
+          </strong>
+
+        </p>
+
+
+        @if (percentage >= 50) {
+
+          <h2>
+            🎉 Congratulations! You Passed!
+          </h2>
+
+        } @else {
+
+          <h2>
+            📚 Keep Practicing!
+          </h2>
+
+        }
+
+
+        <button
+          type="button"
+          class="back-button result-button"
+          (click)="backToQuizList()">
+
+          Choose Another Quiz
+
+        </button>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>

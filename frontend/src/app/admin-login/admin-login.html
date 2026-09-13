@@ -1,0 +1,62 @@
+<div class="login-container">
+
+  <div class="login-card">
+
+    <h1>Admin Login</h1>
+
+    <p class="subtitle">
+      Login to manage the Online Quiz Application
+    </p>
+
+    <div class="input-group">
+
+      <label>
+        Admin Email
+      </label>
+
+      <input
+        type="email"
+        [(ngModel)]="email"
+        placeholder="Enter admin email"
+      >
+
+    </div>
+
+    <div class="input-group">
+
+      <label>
+        Password
+      </label>
+
+      <input
+        type="password"
+        [(ngModel)]="password"
+        placeholder="Enter admin password"
+      >
+
+    </div>
+
+    @if (message) {
+
+      <p class="error-message">
+        {{ message }}
+      </p>
+
+    }
+
+    <button
+      type="button"
+      class="login-button"
+      (click)="login()">
+
+      Admin Login
+
+    </button>
+
+    <a routerLink="/">
+      ← Back to Home
+    </a>
+
+  </div>
+
+</div>

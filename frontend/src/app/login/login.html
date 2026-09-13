@@ -1,0 +1,74 @@
+<div class="login-container">
+
+  <div class="login-card">
+
+    <h1>Online Quiz Application</h1>
+
+    <h2>Login</h2>
+
+    <p>Login to continue your quiz</p>
+
+
+    <form (ngSubmit)="loginUser()">
+
+      <div class="input-group">
+
+        <label>Email</label>
+
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Enter your email"
+          required>
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>Password</label>
+
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Enter your password"
+          required>
+
+      </div>
+
+
+      <button
+        type="submit"
+        class="login-button">
+
+        Login
+
+      </button>
+
+    </form>
+
+
+    @if (message) {
+
+      <p class="message">
+        {{ message }}
+      </p>
+
+    }
+
+
+    <p class="register-text">
+
+      Don't have an account?
+
+      <a routerLink="/register">
+        Register
+      </a>
+
+    </p>
+
+  </div>
+
+</div>
