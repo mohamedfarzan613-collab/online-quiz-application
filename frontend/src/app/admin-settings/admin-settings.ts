@@ -1,23 +1,12 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef
-} from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-settings',
-
-  imports: [
-    FormsModule,
-    RouterLink
-  ],
-
+  imports: [FormsModule, RouterLink],
   templateUrl: './admin-settings.html',
-
   styleUrl: './admin-settings.css'
 })
 export class AdminSettings implements OnInit {
@@ -30,9 +19,11 @@ export class AdminSettings implements OnInit {
 
   password: string = '';
 
+  confirmPassword: string = '';
+
   message: string = '';
 
-  errorMessage: string = '';
+  successMessage: string = '';
 
   loading: boolean = true;
 
@@ -41,33 +32,38 @@ export class AdminSettings implements OnInit {
 
   constructor(
     private http: HttpClient,
-
-    private router: Router,
-
-    private changeDetector: ChangeDetectorRef
+    private router: Router
   ) {}
 
 
   ngOnInit(): void {
 
-    console.log(
-      'ADMIN SETTINGS STARTED'
-    );
+    this.adminId =
+      localStorage.getItem('adminId') || '';
+
+    if (!this.adminId) {
+
+      this.message =
+        'Admin session not found. Please login again.';
+
+      this.loading = false;
+
+      return;
+
+    }
 
     this.loadAdmin();
 
   }
 
 
-  // ==================================
-  // LOAD ADMIN FROM MONGODB
-  // ==================================
+  // ==========================================
+  // LOAD ADMIN DETAILS
+  // ==========================================
 
   loadAdmin(): void {
 
-    console.log(
-      'Calling Admin API...'
-    );
+    this.loading = true;
 
     this.http.get<any>(
       'http://localhost:3000/api/admin'
@@ -77,12 +73,9 @@ export class AdminSettings implements OnInit {
       next: (admin) => {
 
         console.log(
-          'ADMIN API SUCCESS:',
+          'Admin details:',
           admin
         );
-
-        this.adminId =
-          admin._id;
 
         this.username =
           admin.username || '';
@@ -92,24 +85,19 @@ export class AdminSettings implements OnInit {
 
         this.loading = false;
 
-        this.changeDetector.detectChanges();
-
       },
-
 
       error: (error) => {
 
         console.error(
-          'ADMIN API ERROR:',
+          'Error loading admin:',
           error
         );
 
+        this.message =
+          'Unable to load admin details.';
+
         this.loading = false;
-
-        this.errorMessage =
-          'Unable to load admin settings.';
-
-        this.changeDetector.detectChanges();
 
       }
 
@@ -118,104 +106,89 @@ export class AdminSettings implements OnInit {
   }
 
 
-  // ==================================
-  // UPDATE ADMIN
-  // ==================================
+  // ==========================================
+  // UPDATE ADMIN SETTINGS
+  // ==========================================
 
   updateSettings(): void {
 
     this.message = '';
 
-    this.errorMessage = '';
+    this.successMessage = '';
+
+
+    // Check empty fields
+    if (
+      !this.username.trim() ||
+      !this.email.trim() ||
+      !this.password
+    ) {
+
+      this.message =
+        'Please fill all fields.';
+
+      return;
+
+    }
+
+
+    // Check password confirmation
+    if (
+      this.password !==
+      this.confirmPassword
+    ) {
+
+      this.message =
+        'Passwords do not match.';
+
+      return;
+
+    }
 
 
     if (!this.adminId) {
 
-      this.errorMessage =
-        'Admin ID not found.';
+      this.message =
+        'Admin ID not found. Please login again.';
 
       return;
 
     }
-
-
-    if (!this.username.trim()) {
-
-      this.errorMessage =
-        'Please enter admin username.';
-
-      return;
-
-    }
-
-
-    if (!this.email.trim()) {
-
-      this.errorMessage =
-        'Please enter admin email.';
-
-      return;
-
-    }
-
-
-    const updateData: any = {
-
-      username:
-        this.username.trim(),
-
-      email:
-        this.email.trim()
-
-    };
-
-
-    // Password is optional
-
-    if (this.password.trim()) {
-
-      updateData.password =
-        this.password.trim();
-
-    }
-
-
-    console.log(
-      'Updating Admin:',
-      this.adminId
-    );
 
 
     this.saving = true;
 
 
-    this.http.put<any>(
+    const adminData = {
 
+      username:
+        this.username.trim(),
+
+      email:
+        this.email.trim(),
+
+      password:
+        this.password
+
+    };
+
+
+    this.http.put<any>(
       'http://localhost:3000/api/admin/' +
       this.adminId,
-
-      updateData
-
+      adminData
     )
     .subscribe({
 
       next: (response) => {
 
         console.log(
-          'ADMIN UPDATE SUCCESS:',
+          'Admin updated:',
           response
         );
 
 
-        this.username =
-          response.admin.username;
-
-        this.email =
-          response.admin.email;
-
-        this.password = '';
-
-
+        // Update local storage
         localStorage.setItem(
           'adminUsername',
           response.admin.username
@@ -227,33 +200,51 @@ export class AdminSettings implements OnInit {
         );
 
 
-        this.message =
+        this.successMessage =
           'Admin settings updated successfully!';
 
+        this.message = '';
+
+        this.password = '';
+
+        this.confirmPassword = '';
 
         this.saving = false;
 
-        this.changeDetector.detectChanges();
+
+        alert(
+          'Admin settings updated successfully!'
+        );
 
       },
-
 
       error: (error) => {
 
         console.error(
-          'ADMIN UPDATE ERROR:',
+          'Admin settings error:',
           error
         );
 
 
-        this.errorMessage =
-          error.error?.message ||
-          'Unable to update admin settings.';
-
-
         this.saving = false;
 
-        this.changeDetector.detectChanges();
+
+        if (
+          error.error &&
+          error.error.message
+        ) {
+
+          this.message =
+            error.error.message;
+
+        }
+
+        else {
+
+          this.message =
+            'Unable to update admin settings.';
+
+        }
 
       }
 
@@ -262,14 +253,49 @@ export class AdminSettings implements OnInit {
   }
 
 
-  // ==================================
-  // BACK TO DASHBOARD
-  // ==================================
+  // ==========================================
+  // BACK TO ADMIN DASHBOARD
+  // ==========================================
 
   goToDashboard(): void {
 
     this.router.navigate([
       '/admin-dashboard'
+    ]);
+
+  }
+
+
+  // ==========================================
+  // ADMIN LOGOUT
+  // ==========================================
+
+  adminLogout(): void {
+
+    localStorage.removeItem(
+      'adminLoggedIn'
+    );
+
+    localStorage.removeItem(
+      'adminId'
+    );
+
+    localStorage.removeItem(
+      'adminUsername'
+    );
+
+    localStorage.removeItem(
+      'adminEmail'
+    );
+
+
+    alert(
+      'Admin logout successful!'
+    );
+
+
+    this.router.navigate([
+      '/admin-login'
     ]);
 
   }

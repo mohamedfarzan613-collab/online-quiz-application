@@ -9,76 +9,42 @@ import { Dashboard } from './dashboard/dashboard';
 import { Admin } from './admin/admin';
 import { AdminLogin } from './admin-login/admin-login';
 import { AdminDashboard } from './admin-dashboard/admin-dashboard';
+import { AdminResults } from './admin-results/admin-results';
 import { AdminSettings } from './admin-settings/admin-settings';
 
 import { adminAuthGuard } from './admin-auth-guard';
 
-
 export const routes: Routes = [
-
-  // =========================
-  // HOME
-  // =========================
 
   {
     path: '',
     component: Home
   },
 
-
-  // =========================
-  // STUDENT LOGIN
-  // =========================
-
   {
     path: 'login',
     component: Login
   },
-
-
-  // =========================
-  // STUDENT REGISTER
-  // =========================
 
   {
     path: 'register',
     component: Register
   },
 
-
-  // =========================
-  // QUIZ
-  // =========================
-
   {
     path: 'quiz',
     component: Quiz
   },
-
-
-  // =========================
-  // STUDENT DASHBOARD
-  // =========================
 
   {
     path: 'dashboard',
     component: Dashboard
   },
 
-
-  // =========================
-  // ADMIN LOGIN
-  // =========================
-
   {
     path: 'admin-login',
     component: AdminLogin
   },
-
-
-  // =========================
-  // ADMIN DASHBOARD
-  // =========================
 
   {
     path: 'admin-dashboard',
@@ -86,32 +52,23 @@ export const routes: Routes = [
     canActivate: [adminAuthGuard]
   },
 
-
-  // =========================
-  // QUIZ MANAGEMENT
-  // =========================
-
   {
     path: 'admin',
     component: Admin,
     canActivate: [adminAuthGuard]
   },
 
-
-  // =========================
-  // ADMIN SETTINGS
-  // =========================
+  {
+    path: 'admin-results',
+    component: AdminResults,
+    canActivate: [adminAuthGuard]
+  },
 
   {
     path: 'admin-settings',
     component: AdminSettings,
     canActivate: [adminAuthGuard]
   },
-
-
-  // =========================
-  // INVALID URL
-  // =========================
 
   {
     path: '**',

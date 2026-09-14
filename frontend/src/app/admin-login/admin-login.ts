@@ -12,63 +12,105 @@ import { HttpClient } from '@angular/common/http';
 export class AdminLogin {
 
   email: string = '';
+
   password: string = '';
+
   message: string = '';
+
+  loading: boolean = false;
+
 
   constructor(
     private router: Router,
     private http: HttpClient
   ) {}
 
+
   login(): void {
 
     this.message = '';
 
+    // Check empty fields
     if (!this.email || !this.password) {
-      this.message = 'Please enter email and password.';
+
+      this.message =
+        'Please enter email and password.';
+
       return;
+
     }
 
+
+    this.loading = true;
+
+
+    // Send login details to backend
     const adminLoginData = {
+
       email: this.email,
+
       password: this.password
+
     };
+
 
     this.http.post<any>(
       'http://localhost:3000/api/admin/login',
       adminLoginData
-    ).subscribe({
+    )
+    .subscribe({
 
       next: (response) => {
 
-        console.log('Admin login successful:', response);
+        console.log(
+          'Admin login response:',
+          response
+        );
 
+
+        // Store admin login status
         localStorage.setItem(
           'adminLoggedIn',
           'true'
         );
 
-        localStorage.setItem(
-          'adminId',
-          response.admin.id
+
+        // Store admin details
+        if (response.admin) {
+
+          localStorage.setItem(
+            'adminId',
+            response.admin.id
+          );
+
+          localStorage.setItem(
+            'adminUsername',
+            response.admin.username
+          );
+
+          localStorage.setItem(
+            'adminEmail',
+            response.admin.email
+          );
+
+        }
+
+
+        this.loading = false;
+
+
+        alert(
+          'Admin login successful!'
         );
 
-        localStorage.setItem(
-          'adminUsername',
-          response.admin.username
-        );
 
-        localStorage.setItem(
-          'adminEmail',
-          response.admin.email
-        );
-
-        alert('Admin login successful!');
-
+        // Go to Admin Dashboard
         this.router.navigate([
           '/admin-dashboard'
         ]);
+
       },
+
 
       error: (error) => {
 
@@ -76,6 +118,10 @@ export class AdminLogin {
           'Admin login error:',
           error
         );
+
+
+        this.loading = false;
+
 
         if (
           error.error &&
@@ -85,14 +131,19 @@ export class AdminLogin {
           this.message =
             error.error.message;
 
-        } else {
+        }
+
+        else {
 
           this.message =
             'Unable to connect to server.';
 
         }
+
       }
 
     });
+
   }
+
 }

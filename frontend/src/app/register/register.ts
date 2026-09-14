@@ -31,7 +31,7 @@ export class Register {
     };
 
     this.http.post(
-      'http://localhost:3000/api/users/register',
+      'https://online-quiz-backend-r38d.onrender.com/api/users/register',
       user
     ).subscribe({
 

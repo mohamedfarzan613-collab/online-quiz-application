@@ -116,7 +116,7 @@ export class Admin implements OnInit {
 
     this.http.get<any[]>(
 
-      'http://localhost:3000/api/quizzes'
+      'https://online-quiz-backend-r38d.onrender.com/api/quizzes'
 
     ).subscribe({
 
@@ -348,7 +348,7 @@ export class Admin implements OnInit {
 
     this.http.post<any>(
 
-      'http://localhost:3000/api/quizzes/add',
+      'https://online-quiz-backend-r38d.onrender.com/api/quizzes/add',
 
       this.quiz
 
@@ -524,7 +524,7 @@ export class Admin implements OnInit {
 
     this.http.put<any>(
 
-      'http://localhost:3000/api/quizzes/' +
+      'https://online-quiz-backend-r38d.onrender.com/api/quizzes/' +
 
       this.editingId,
 
@@ -586,7 +586,7 @@ export class Admin implements OnInit {
 
     this.http.delete<any>(
 
-      'http://localhost:3000/api/quizzes/' +
+      'https://online-quiz-backend-r38d.onrender.com/api/quizzes/' +
 
       id
 

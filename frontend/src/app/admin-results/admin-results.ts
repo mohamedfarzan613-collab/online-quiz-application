@@ -86,7 +86,7 @@ export class AdminResults
 
     this.http.get<any[]>(
 
-      'http://localhost:3000/api/results'
+      'https://online-quiz-backend-r38d.onrender.com/api/results'
 
     ).subscribe({
 

@@ -82,7 +82,7 @@ export class AdminDashboard implements OnInit {
 
 
     this.http.get<any[]>(
-      'http://localhost:3000/api/users'
+      'https://online-quiz-backend-r38d.onrender.com/api/users'
     )
     .subscribe({
 
@@ -144,7 +144,7 @@ export class AdminDashboard implements OnInit {
 
 
     this.http.get<any[]>(
-      'http://localhost:3000/api/quizzes'
+      'https://online-quiz-backend-r38d.onrender.com/api/quizzes'
     )
     .subscribe({
 
@@ -240,7 +240,7 @@ export class AdminDashboard implements OnInit {
 
 
     this.http.get<any[]>(
-      'http://localhost:3000/api/results'
+      'https://online-quiz-backend-r38d.onrender.com/api/results'
     )
     .subscribe({
 

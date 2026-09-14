@@ -112,7 +112,7 @@ export class Dashboard implements OnInit {
 
 
     this.http.get<any[]>(
-      'http://localhost:3000/api/results/user/' +
+      'https://online-quiz-backend-r38d.onrender.com/api/results/user/' +
       this.userId
     )
     .subscribe({

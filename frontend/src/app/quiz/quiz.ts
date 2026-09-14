@@ -62,7 +62,7 @@ export class Quiz implements OnInit {
 
 
     this.http.get<any[]>(
-      'http://localhost:3000/api/quizzes'
+      'https://online-quiz-backend-r38d.onrender.com/api/quizzes'
     )
     .subscribe({
 
@@ -332,7 +332,7 @@ export class Quiz implements OnInit {
 
     this.http.post<any>(
 
-      'http://localhost:3000/api/results/add',
+      'https://online-quiz-backend-r38d.onrender.com/api/results/add',
 
       result
 
