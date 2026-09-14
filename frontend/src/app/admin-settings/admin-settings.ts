@@ -66,7 +66,7 @@ export class AdminSettings implements OnInit {
     this.loading = true;
 
     this.http.get<any>(
-      'http://localhost:3000/api/admin'
+      'https://online-quiz-backend-r38d.onrender.com/api/admin'
     )
     .subscribe({
 
@@ -174,7 +174,7 @@ export class AdminSettings implements OnInit {
 
 
     this.http.put<any>(
-      'http://localhost:3000/api/admin/' +
+      'https://online-quiz-backend-r38d.onrender.com/api/admin/' +
       this.adminId,
       adminData
     )

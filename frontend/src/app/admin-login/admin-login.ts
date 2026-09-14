@@ -55,7 +55,7 @@ export class AdminLogin {
 
 
     this.http.post<any>(
-      'http://localhost:3000/api/admin/login',
+      'https://online-quiz-backend-r38d.onrender.com/api/admin/login',
       adminLoginData
     )
     .subscribe({
