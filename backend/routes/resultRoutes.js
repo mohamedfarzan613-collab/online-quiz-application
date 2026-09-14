@@ -1,7 +1,7 @@
 const express = require("express");
 
-const Result = require("../models/Result");
-const Quiz = require("../models/Quiz");
+const Result = require("../models/result");
+const Quiz = require("../models/quiz");
 
 const router = express.Router();
 
