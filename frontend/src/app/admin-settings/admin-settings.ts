@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 export class AdminSettings implements OnInit {
 
   adminId: string = '';
-
   username: string = '';
   email: string = '';
 
@@ -28,20 +27,15 @@ export class AdminSettings implements OnInit {
   private apiUrl =
     'https://online-quiz-backend-r38d.onrender.com/api/admin';
 
-
   constructor(
     private http: HttpClient,
     private router: Router
   ) {}
 
-
-  // ==============================
-  // LOAD ADMIN DETAILS
-  // ==============================
-
   ngOnInit(): void {
 
-    this.adminId = localStorage.getItem('adminId') || '';
+    this.adminId =
+      localStorage.getItem('adminId') || '';
 
     if (!this.adminId) {
 
@@ -56,11 +50,6 @@ export class AdminSettings implements OnInit {
     this.loadAdmin();
   }
 
-
-  // ==============================
-  // GET ADMIN DETAILS
-  // ==============================
-
   loadAdmin(): void {
 
     this.loading = true;
@@ -72,8 +61,11 @@ export class AdminSettings implements OnInit {
 
           console.log('Admin details:', admin);
 
-          this.username = admin.username || '';
-          this.email = admin.email || '';
+          this.username =
+            admin.username || '';
+
+          this.email =
+            admin.email || '';
 
           this.loading = false;
         },
@@ -94,18 +86,11 @@ export class AdminSettings implements OnInit {
       });
   }
 
-
-  // ==============================
-  // UPDATE ADMIN SETTINGS
-  // ==============================
-
   updateSettings(): void {
 
     this.message = '';
     this.successMessage = '';
 
-
-    // Check username
     if (!this.username.trim()) {
 
       this.message =
@@ -114,8 +99,6 @@ export class AdminSettings implements OnInit {
       return;
     }
 
-
-    // Check email
     if (!this.email.trim()) {
 
       this.message =
@@ -124,8 +107,6 @@ export class AdminSettings implements OnInit {
       return;
     }
 
-
-    // Check password
     if (!this.password) {
 
       this.message =
@@ -134,8 +115,6 @@ export class AdminSettings implements OnInit {
       return;
     }
 
-
-    // Check confirm password
     if (!this.confirmPassword) {
 
       this.message =
@@ -144,9 +123,10 @@ export class AdminSettings implements OnInit {
       return;
     }
 
-
-    // Compare passwords
-    if (this.password !== this.confirmPassword) {
+    if (
+      this.password !==
+      this.confirmPassword
+    ) {
 
       this.message =
         'Passwords do not match.';
@@ -154,8 +134,6 @@ export class AdminSettings implements OnInit {
       return;
     }
 
-
-    // Check admin ID
     if (!this.adminId) {
 
       this.message =
@@ -164,25 +142,23 @@ export class AdminSettings implements OnInit {
       return;
     }
 
-
     this.saving = true;
-
 
     const adminData = {
 
-      username: this.username.trim(),
+      username:
+        this.username.trim(),
 
-      email: this.email.trim(),
+      email:
+        this.email.trim(),
 
-      password: this.password
-
+      password:
+        this.password
     };
-
 
     console.log(
       'Updating admin settings...'
     );
-
 
     this.http.put<any>(
       this.apiUrl + '/' + this.adminId,
@@ -190,19 +166,12 @@ export class AdminSettings implements OnInit {
     )
     .subscribe({
 
-      // ==============================
-      // SUCCESS
-      // ==============================
-
       next: (response) => {
 
         console.log(
           'Admin updated:',
           response
         );
-
-
-        // Update local storage
 
         if (response.admin) {
 
@@ -217,31 +186,20 @@ export class AdminSettings implements OnInit {
           );
         }
 
-
         this.successMessage =
           'Admin settings updated successfully!';
 
         this.message = '';
 
-
-        // Clear password fields
-
         this.password = '';
-
         this.confirmPassword = '';
 
         this.saving = false;
-
 
         alert(
           'Admin settings updated successfully!'
         );
       },
-
-
-      // ==============================
-      // ERROR
-      // ==============================
 
       error: (error) => {
 
@@ -250,9 +208,7 @@ export class AdminSettings implements OnInit {
           error
         );
 
-
         this.saving = false;
-
 
         if (
           error.error &&
@@ -267,30 +223,18 @@ export class AdminSettings implements OnInit {
           this.message =
             'Unable to update admin settings.';
         }
-
       }
 
     });
-
   }
-
-
-  // ==============================
-  // BACK TO ADMIN DASHBOARD
-  // ==============================
 
   goToDashboard(): void {
 
-    this.router.navigate(
-      ['/admin-dashboard']
-    );
+    this.router.navigate([
+      '/admin-dashboard'
+    ]);
 
   }
-
-
-  // ==============================
-  // ADMIN LOGOUT
-  // ==============================
 
   adminLogout(): void {
 
@@ -310,15 +254,13 @@ export class AdminSettings implements OnInit {
       'adminEmail'
     );
 
-
     alert(
       'Admin logout successful!'
     );
 
-
-    this.router.navigate(
-      ['/admin-login']
-    );
+    this.router.navigate([
+      '/admin-login'
+    ]);
 
   }
 

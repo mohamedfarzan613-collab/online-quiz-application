@@ -15,7 +15,6 @@
 
       </div>
 
-
       <button
         type="button"
         class="logout-button"
@@ -46,7 +45,7 @@
     }
 
 
-    <!-- SETTINGS FORM -->
+    <!-- SETTINGS -->
     @if (!loading) {
 
       <div class="settings-card">
@@ -56,10 +55,8 @@
         </h2>
 
         <p class="description">
-
-          Update your administrator
-          username, email and password.
-
+          Update your administrator username,
+          email and password.
         </p>
 
 
@@ -127,7 +124,7 @@
         </div>
 
 
-        <!-- ERROR MESSAGE -->
+        <!-- ERROR -->
         @if (message) {
 
           <div class="error-message">
@@ -139,7 +136,7 @@
         }
 
 
-        <!-- SUCCESS MESSAGE -->
+        <!-- SUCCESS -->
         @if (successMessage) {
 
           <div class="success-message">
@@ -151,7 +148,7 @@
         }
 
 
-        <!-- UPDATE BUTTON -->
+        <!-- UPDATE -->
         <button
           type="button"
           class="update-button"
@@ -171,7 +168,7 @@
         </button>
 
 
-        <!-- BACK BUTTON -->
+        <!-- BACK -->
         <button
           type="button"
           class="dashboard-button"
