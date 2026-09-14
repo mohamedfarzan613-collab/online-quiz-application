@@ -6,13 +6,11 @@
     <div class="settings-header">
 
       <div>
-
         <h1>Admin Settings</h1>
 
         <p>
           Manage your administrator account
         </p>
-
       </div>
 
       <button
@@ -27,160 +25,130 @@
     </div>
 
 
-    <!-- LOADING -->
-    @if (loading) {
+    <!-- SETTINGS CARD -->
+    <div class="settings-card">
 
-      <div class="loading-box">
+      <h2>
+        Account Information
+      </h2>
 
-        <h2>
-          Loading Admin Settings...
-        </h2>
-
-        <p>
-          Please wait
-        </p>
-
-      </div>
-
-    }
+      <p class="description">
+        Update your administrator username,
+        email and password.
+      </p>
 
 
-    <!-- SETTINGS -->
-    @if (!loading) {
+      <!-- USERNAME -->
+      <div class="input-group">
 
-      <div class="settings-card">
+        <label>
+          Admin Username
+        </label>
 
-        <h2>
-          Account Information
-        </h2>
-
-        <p class="description">
-          Update your administrator username,
-          email and password.
-        </p>
-
-
-        <!-- USERNAME -->
-        <div class="input-group">
-
-          <label>
-            Admin Username
-          </label>
-
-          <input
-            type="text"
-            [(ngModel)]="username"
-            name="username"
-            placeholder="Enter admin username">
-
-        </div>
-
-
-        <!-- EMAIL -->
-        <div class="input-group">
-
-          <label>
-            Admin Email
-          </label>
-
-          <input
-            type="email"
-            [(ngModel)]="email"
-            name="email"
-            placeholder="Enter admin email">
-
-        </div>
-
-
-        <!-- PASSWORD -->
-        <div class="input-group">
-
-          <label>
-            New Password
-          </label>
-
-          <input
-            type="password"
-            [(ngModel)]="password"
-            name="password"
-            placeholder="Enter new password">
-
-        </div>
-
-
-        <!-- CONFIRM PASSWORD -->
-        <div class="input-group">
-
-          <label>
-            Confirm Password
-          </label>
-
-          <input
-            type="password"
-            [(ngModel)]="confirmPassword"
-            name="confirmPassword"
-            placeholder="Confirm new password">
-
-        </div>
-
-
-        <!-- ERROR -->
-        @if (message) {
-
-          <div class="error-message">
-
-            {{ message }}
-
-          </div>
-
-        }
-
-
-        <!-- SUCCESS -->
-        @if (successMessage) {
-
-          <div class="success-message">
-
-            {{ successMessage }}
-
-          </div>
-
-        }
-
-
-        <!-- UPDATE -->
-        <button
-          type="button"
-          class="update-button"
-          (click)="updateSettings()"
-          [disabled]="saving">
-
-          @if (saving) {
-
-            Updating...
-
-          } @else {
-
-            Update Admin Settings
-
-          }
-
-        </button>
-
-
-        <!-- BACK -->
-        <button
-          type="button"
-          class="dashboard-button"
-          (click)="goToDashboard()">
-
-          ← Back to Admin Dashboard
-
-        </button>
+        <input
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          placeholder="Enter admin username">
 
       </div>
 
-    }
+
+      <!-- EMAIL -->
+      <div class="input-group">
+
+        <label>
+          Admin Email
+        </label>
+
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Enter admin email">
+
+      </div>
+
+
+      <!-- PASSWORD -->
+      <div class="input-group">
+
+        <label>
+          New Password
+        </label>
+
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Enter new password">
+
+      </div>
+
+
+      <!-- CONFIRM PASSWORD -->
+      <div class="input-group">
+
+        <label>
+          Confirm Password
+        </label>
+
+        <input
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          placeholder="Confirm new password">
+
+      </div>
+
+
+      <!-- ERROR MESSAGE -->
+      @if (message) {
+
+        <div class="error-message">
+          {{ message }}
+        </div>
+
+      }
+
+
+      <!-- SUCCESS MESSAGE -->
+      @if (successMessage) {
+
+        <div class="success-message">
+          {{ successMessage }}
+        </div>
+
+      }
+
+
+      <!-- UPDATE BUTTON -->
+      <button
+        type="button"
+        class="update-button"
+        (click)="updateSettings()"
+        [disabled]="saving">
+
+        @if (saving) {
+          Updating...
+        } @else {
+          Update Admin Settings
+        }
+
+      </button>
+
+
+      <!-- BACK BUTTON -->
+      <button
+        type="button"
+        class="dashboard-button"
+        (click)="goToDashboard()">
+
+        ← Back to Admin Dashboard
+
+      </button>
+
+    </div>
 
   </div>
 
