@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { timeout } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-settings',
@@ -27,15 +28,24 @@ export class AdminSettings implements OnInit {
   private apiUrl =
     'https://online-quiz-backend-r38d.onrender.com/api/admin';
 
+
   constructor(
     private http: HttpClient,
     private router: Router
   ) {}
 
+
   ngOnInit(): void {
+
+    console.log('ADMIN SETTINGS STARTED');
 
     this.adminId =
       localStorage.getItem('adminId') || '';
+
+    console.log(
+      'Admin ID:',
+      this.adminId
+    );
 
     if (!this.adminId) {
 
@@ -50,16 +60,28 @@ export class AdminSettings implements OnInit {
     this.loadAdmin();
   }
 
+
   loadAdmin(): void {
+
+    console.log(
+      'Calling Admin API:',
+      this.apiUrl
+    );
 
     this.loading = true;
 
     this.http.get<any>(this.apiUrl)
+      .pipe(
+        timeout(15000)
+      )
       .subscribe({
 
         next: (admin) => {
 
-          console.log('Admin details:', admin);
+          console.log(
+            'ADMIN API SUCCESS:',
+            admin
+          );
 
           this.username =
             admin.username || '';
@@ -73,23 +95,50 @@ export class AdminSettings implements OnInit {
         error: (error) => {
 
           console.error(
-            'Error loading admin:',
+            'ADMIN API ERROR:',
             error
           );
 
-          this.message =
-            'Unable to load admin details.';
-
           this.loading = false;
+
+          if (error.name === 'TimeoutError') {
+
+            this.message =
+              'Server is taking too long to respond. Please try again.';
+
+          }
+          else if (error.status === 0) {
+
+            this.message =
+              'Unable to connect to the backend server.';
+
+          }
+          else if (
+            error.error &&
+            error.error.message
+          ) {
+
+            this.message =
+              error.error.message;
+
+          }
+          else {
+
+            this.message =
+              'Unable to load admin details.';
+          }
+
         }
 
       });
   }
 
+
   updateSettings(): void {
 
     this.message = '';
     this.successMessage = '';
+
 
     if (!this.username.trim()) {
 
@@ -99,6 +148,7 @@ export class AdminSettings implements OnInit {
       return;
     }
 
+
     if (!this.email.trim()) {
 
       this.message =
@@ -106,6 +156,7 @@ export class AdminSettings implements OnInit {
 
       return;
     }
+
 
     if (!this.password) {
 
@@ -115,6 +166,7 @@ export class AdminSettings implements OnInit {
       return;
     }
 
+
     if (!this.confirmPassword) {
 
       this.message =
@@ -122,6 +174,7 @@ export class AdminSettings implements OnInit {
 
       return;
     }
+
 
     if (
       this.password !==
@@ -134,6 +187,7 @@ export class AdminSettings implements OnInit {
       return;
     }
 
+
     if (!this.adminId) {
 
       this.message =
@@ -142,7 +196,9 @@ export class AdminSettings implements OnInit {
       return;
     }
 
+
     this.saving = true;
+
 
     const adminData = {
 
@@ -154,24 +210,31 @@ export class AdminSettings implements OnInit {
 
       password:
         this.password
+
     };
+
 
     console.log(
       'Updating admin settings...'
     );
 
+
     this.http.put<any>(
       this.apiUrl + '/' + this.adminId,
       adminData
+    )
+    .pipe(
+      timeout(15000)
     )
     .subscribe({
 
       next: (response) => {
 
         console.log(
-          'Admin updated:',
+          'ADMIN UPDATE SUCCESS:',
           response
         );
+
 
         if (response.admin) {
 
@@ -186,6 +249,7 @@ export class AdminSettings implements OnInit {
           );
         }
 
+
         this.successMessage =
           'Admin settings updated successfully!';
 
@@ -196,21 +260,37 @@ export class AdminSettings implements OnInit {
 
         this.saving = false;
 
+
         alert(
           'Admin settings updated successfully!'
         );
+
       },
+
 
       error: (error) => {
 
         console.error(
-          'Admin settings error:',
+          'ADMIN UPDATE ERROR:',
           error
         );
 
         this.saving = false;
 
-        if (
+
+        if (error.name === 'TimeoutError') {
+
+          this.message =
+            'Server is taking too long to respond.';
+
+        }
+        else if (error.status === 0) {
+
+          this.message =
+            'Unable to connect to backend server.';
+
+        }
+        else if (
           error.error &&
           error.error.message
         ) {
@@ -218,15 +298,18 @@ export class AdminSettings implements OnInit {
           this.message =
             error.error.message;
 
-        } else {
+        }
+        else {
 
           this.message =
             'Unable to update admin settings.';
         }
+
       }
 
     });
   }
+
 
   goToDashboard(): void {
 
@@ -235,6 +318,7 @@ export class AdminSettings implements OnInit {
     ]);
 
   }
+
 
   adminLogout(): void {
 
@@ -254,9 +338,11 @@ export class AdminSettings implements OnInit {
       'adminEmail'
     );
 
+
     alert(
       'Admin logout successful!'
     );
+
 
     this.router.navigate([
       '/admin-login'
