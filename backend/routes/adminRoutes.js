@@ -4,9 +4,10 @@ const Admin = require("../models/Admin");
 const router = express.Router();
 
 
-// ===============================
+// ======================================================
 // ADMIN LOGIN
-// ===============================
+// POST: /api/admin/login
+// ======================================================
 
 router.post("/login", async (req, res) => {
 
@@ -14,7 +15,17 @@ router.post("/login", async (req, res) => {
 
         const { email, password } = req.body;
 
-        const admin = await Admin.findOne({ email });
+        if (!email || !password) {
+
+            return res.status(400).json({
+                message: "Please enter email and password"
+            });
+
+        }
+
+        const admin = await Admin.findOne({
+            email: email
+        });
 
         if (!admin) {
 
@@ -44,14 +55,17 @@ router.post("/login", async (req, res) => {
 
         });
 
-    } catch (error) {
+    }
+    catch (error) {
 
         console.log("Admin Login Error:");
         console.log(error.message);
 
         res.status(500).json({
+
             message: "Error during admin login",
             error: error.message
+
         });
 
     }
@@ -59,9 +73,10 @@ router.post("/login", async (req, res) => {
 });
 
 
-// ===============================
-// GET ADMIN
-// ===============================
+// ======================================================
+// GET ADMIN DETAILS
+// GET: /api/admin
+// ======================================================
 
 router.get("/", async (req, res) => {
 
@@ -80,11 +95,17 @@ router.get("/", async (req, res) => {
 
         res.json(admin);
 
-    } catch (error) {
+    }
+    catch (error) {
+
+        console.log("Get Admin Error:");
+        console.log(error.message);
 
         res.status(500).json({
+
             message: "Error getting admin",
             error: error.message
+
         });
 
     }
@@ -92,9 +113,10 @@ router.get("/", async (req, res) => {
 });
 
 
-// ===============================
+// ======================================================
 // CREATE DEFAULT ADMIN
-// ===============================
+// POST: /api/admin/create-default
+// ======================================================
 
 router.post("/create-default", async (req, res) => {
 
@@ -106,7 +128,14 @@ router.post("/create-default", async (req, res) => {
         if (existingAdmin) {
 
             return res.json({
-                message: "Admin account already exists"
+
+                message: "Admin account already exists",
+
+                admin: {
+                    username: existingAdmin.username,
+                    email: existingAdmin.email
+                }
+
             });
 
         }
@@ -114,7 +143,9 @@ router.post("/create-default", async (req, res) => {
         const admin = new Admin({
 
             username: "admin",
+
             email: "admin@gmail.com",
+
             password: "admin123"
 
         });
@@ -123,8 +154,7 @@ router.post("/create-default", async (req, res) => {
 
         res.status(201).json({
 
-            message:
-                "Default admin created successfully",
+            message: "Default admin created successfully",
 
             admin: {
                 username: admin.username,
@@ -133,7 +163,8 @@ router.post("/create-default", async (req, res) => {
 
         });
 
-    } catch (error) {
+    }
+    catch (error) {
 
         console.log("Create Admin Error:");
         console.log(error.message);
@@ -141,7 +172,6 @@ router.post("/create-default", async (req, res) => {
         res.status(500).json({
 
             message: "Error creating admin",
-
             error: error.message
 
         });
@@ -151,9 +181,10 @@ router.post("/create-default", async (req, res) => {
 });
 
 
-// ===============================
+// ======================================================
 // UPDATE ADMIN SETTINGS
-// ===============================
+// PUT: /api/admin/:id
+// ======================================================
 
 router.put("/:id", async (req, res) => {
 
@@ -165,30 +196,36 @@ router.put("/:id", async (req, res) => {
             password
         } = req.body;
 
+        if (!username || !email || !password) {
+
+            return res.status(400).json({
+
+                message:
+                    "Username, email and password are required"
+
+            });
+
+        }
+
         const admin =
             await Admin.findById(req.params.id);
 
         if (!admin) {
 
             return res.status(404).json({
+
                 message: "Admin not found"
+
             });
 
         }
 
-        if (username) {
-            admin.username = username;
-        }
+        admin.username = username;
+        admin.email = email;
+        admin.password = password;
 
-        if (email) {
-            admin.email = email;
-        }
-
-        if (password) {
-            admin.password = password;
-        }
-
-        await admin.save();
+        const updatedAdmin =
+            await admin.save();
 
         res.json({
 
@@ -196,17 +233,35 @@ router.put("/:id", async (req, res) => {
                 "Admin settings updated successfully",
 
             admin: {
-                id: admin._id,
-                username: admin.username,
-                email: admin.email
+
+                id: updatedAdmin._id,
+
+                username:
+                    updatedAdmin.username,
+
+                email:
+                    updatedAdmin.email
+
             }
 
         });
 
-    } catch (error) {
+    }
+    catch (error) {
 
         console.log("Update Admin Error:");
         console.log(error.message);
+
+        if (error.code === 11000) {
+
+            return res.status(400).json({
+
+                message:
+                    "Username or email already exists"
+
+            });
+
+        }
 
         res.status(500).json({
 
